@@ -22,7 +22,9 @@ jobs:
     - name: Set up SSH
       uses: easingthemes/ssh-deploy@main
       with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        REMOTE_HOST: ${{ secrets.SERVER_IP }}
+        REMOTE_USER: ${{ secrets.DEPLOY_USER }}
 
     # Deploy to the server
     - name: Deploy to On-Prem Server
