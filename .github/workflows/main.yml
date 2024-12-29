@@ -20,7 +20,7 @@ jobs:
 
     # Set up SSH Agent
     - name: Set up SSH
-      uses: webfactory/ssh-agent@v0.8.1
+      uses: easingthemes/ssh-deploy@main
       with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
