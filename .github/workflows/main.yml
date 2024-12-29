@@ -1,0 +1,34 @@
+name: Deploy Static Website
+
+on:
+  push:
+    branches:
+      - main  # Trigger deployment on pushes to the main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout the repository
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Build the Docker image
+    - name: Build Docker Image
+      run: docker build -t codeandcloud .
+
+    # Set up SSH Agent
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.8.1
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    # Deploy to the server
+    - name: Deploy to On-Prem Server
+      run: |
+        ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+        docker pull codeandcloud
+        docker rm -f codeandcloud || true
+        docker run -d -p 3000:3000 --name codecloud codeandcloud
+        EOF
